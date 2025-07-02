@@ -1,46 +1,46 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
 class RegisterController extends Controller
 {
-    // Menampilkan form registrasi
     public function showRegistrationForm()
     {
-        return view('auth.register');
+        return view('auth.register'); // tampilkan form register
     }
 
-    // Menangani penyimpanan data user
     public function register(Request $request)
-    {
-        // Validasi input
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'username' => 'required|string|max:50|unique:users,username',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8|confirmed',
-        ]);
+{
+    dd($request->all()); // ⬅️ Tambahkan baris ini dulu
 
-        // Simpan ke database
-        $user = User::create([
-            'name' => $request->name,
-            'username' => $request->username,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => 'Member',
-            'is_first_login' => 1,
-        ]);
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'username' => 'required|string|max:50|unique:users',
+        'email' => 'required|string|email|max:255|unique:users',
+        'password' => 'required|string|confirmed|min:6',
+        'role' => 'required|in:Manager,Member',
+    ]);
 
-        // Langsung login setelah register
-        Auth::login($user);
+    // ... lanjut bikin user dll
 
-        // Redirect ke halaman utama
-        return redirect()->route('home')->with('success', 'Registrasi berhasil!');
+
+   $user = User::create([
+    'name' => $request->name,
+    'username' => $request->username,
+    'email' => $request->email,
+    'password' => Hash::make($request->password),
+    'role' => $request->role,
+]);
+
+Auth::login($user); // Sekarang $user udah didefinisikan
+
+
+        return redirect('/dashboard');
     }
 }
+

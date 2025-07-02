@@ -2,48 +2,78 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h2>Register</h2>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
 
-    <!-- resources/views/auth/register.blade.php -->
-<form method="POST" action="{{ url('/register') }}">
-    @csrf
-    
-    <!-- Name -->
-    <div>
-        <label for="name">Nama</label>
-        <input type="text" name="name" id="name" required>
+    <div class="w-full max-w-md bg-white p-8 rounded shadow-md">
+        <h2 class="text-2xl font-bold text-center mb-6">Buat Akun</h2>
+
+        <form method="POST" action="{{ route('register') }}">
+            @csrf
+
+            @if ($errors->any())
+                <div class="bg-red-100 text-red-600 p-2 rounded mb-4 text-sm">
+                    <ul class="list-disc pl-5">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <div class="mb-4">
+                <label class="block text-sm font-medium">Nama</label>
+                <input type="text" name="name" value="{{ old('name') }}" required
+                       class="mt-1 w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300">
+            </div>
+
+            <div class="mb-4">
+    <label class="block text-sm font-medium">Username</label>
+    <input type="text" name="username" value="{{ old('username') }}" required
+           class="mt-1 w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300">
+</div>
+
+            <div class="mb-4">
+                <label class="block text-sm font-medium">Email</label>
+                <input type="email" name="email" value="{{ old('email') }}" required
+                       class="mt-1 w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300">
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-sm font-medium">Password</label>
+                <input type="password" name="password" required
+                       class="mt-1 w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300">
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-sm font-medium">Konfirmasi Password</label>
+                <input type="password" name="password_confirmation" required
+                       class="mt-1 w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300">
+            </div>
+            <!-- ⬇️ Tambahkan bagian ROLE DI SINI -->
+    <div class="mb-4">
+        <label class="block text-sm font-medium">Role</label>
+        <select name="role" required
+                class="mt-1 w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300">
+            <option value="">Pilih role</option>
+            <option value="Member" {{ old('role') == 'Member' ? 'selected' : '' }}>Member</option>
+            <option value="Manager" {{ old('role') == 'Manager' ? 'selected' : '' }}>Manager</option>
+        </select>
     </div>
+    <!-- ⬆️ Di atas tombol -->
+            <button type="submit"
+                    class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">
+                Daftar
+            </button>
+        </form>
 
-    <!-- Username -->
-    <div>
-        <label for="username">Username</label>
-        <input type="text" name="username" id="username" required>
+        <p class="mt-4 text-center text-sm">
+            Sudah punya akun?
+            <a href="{{ route('login') }}" class="text-blue-600 hover:underline">Login di sini</a>
+        </p>
     </div>
-
-    <!-- Email -->
-    <div>
-        <label for="email">Email</label>
-        <input type="email" name="email" id="email" required>
-    </div>
-
-    <!-- Password -->
-    <div>
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password" required>
-    </div>
-
-    <!-- Confirm Password -->
-    <div>
-        <label for="password_confirmation">Konfirmasi Password</label>
-        <input type="password" name="password_confirmation" id="password_confirmation" required>
-    </div>
-
-    <button type="submit">Register</button>
-</form>
 
 </body>
 </html>

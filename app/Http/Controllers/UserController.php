@@ -12,7 +12,7 @@ class UserController extends Controller
     // Menampilkan profil pengguna
     public function showProfile()
     {
-        $user = Auth::user(); // Ambil data user yang sedang login
+        $user = Auth::user();
         return view('user.profile', compact('user'));
     }
 
@@ -28,55 +28,51 @@ class UserController extends Controller
     {
         $user = Auth::user();
 
-        // Validasi input
+        // Validasi input dasar
         $request->validate([
             'name' => 'required|string|max:255',
             'username' => 'required|string|max:50|unique:users,username,' . $user->id,
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
         ]);
 
-        // Update data user
-        $user->name = $request->name;
-        $user->username = $request->username;
-        $user->email = $request->email;
+        // Update data
+        $user->name = trim($request->name);
+        $user->username = trim($request->username);
+        $user->email = trim($request->email);
 
-        // Update password jika diubah
-        if ($request->has('password')) {
+        // Jika user mengisi password baru
+        if ($request->filled('password')) {
             $request->validate([
                 'password' => 'required|string|min:8|confirmed',
             ]);
             $user->password = Hash::make($request->password);
         }
 
-        // Simpan perubahan
         $user->save();
 
         return redirect()->route('user.profile')->with('success', 'Profil berhasil diperbarui!');
     }
 
-    // Menampilkan form untuk mengganti password
+    // Menampilkan form ubah password
     public function changePasswordForm()
     {
         return view('user.change-password');
     }
 
-    // Mengupdate password pengguna
+    // Menyimpan perubahan password
     public function changePassword(Request $request)
     {
         $user = Auth::user();
 
-        // Validasi input
         $request->validate([
             'current_password' => 'required|string',
             'new_password' => 'required|string|min:8|confirmed',
         ]);
 
-        // Cek apakah password lama benar
         if (!Hash::check($request->current_password, $user->password)) {
-            return back()->withErrors(['current_password' => 'Password saat ini tidak sesuai']);
+            return back()->withErrors(['current_password' => 'Password saat ini tidak sesuai'])->withInput();
         }
 
-        // Update password
         $user->password = Hash::make($request->new_password);
         $user->save();
 

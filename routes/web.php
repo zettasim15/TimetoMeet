@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\LoginController; // ✅ BENAR
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ProfileController;
 
@@ -43,3 +43,20 @@ Route::middleware('auth')->group(function () {
     Route::get('/user/change-password', [UserController::class, 'changePasswordForm'])->name('user.change-password');
     Route::post('/user/change-password', [UserController::class, 'changePassword']);
 });
+
+use App\Http\Controllers\DashboardController;
+
+Route::get('/home', function () {
+    return redirect('/dashboard'); // atau ke mana pun kamu mau
+})->name('home');
+
+// routes/web.php
+
+Route::get('/manager-dashboard', function () {
+    return view('dashboard.manager');
+})->middleware('auth');
+
+Route::get('/member-dashboard', function () {
+    return view('dashboard.member');
+})->middleware('auth');
+
