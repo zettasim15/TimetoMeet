@@ -62,3 +62,12 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 ## Kontributor
 - Gisella Laudila ([gisella1109](https://github.com/gisella1109))
+
+## 🙋‍♀️ Kontributor
+
+Berikut adalah daftar kontributor yang telah berkontribusi dalam pengembangan proyek ini:
+
+- **zettasim15** – Pengelola utama dan pengembang backend
+- **gadiza3312** – Desain UI/UX dan pengujian
+- **rafa1091** – Setup awal database dan struktur direktori
+- **gisella1109** – Penambahan dokumentasi README dan informasi kontribusi
